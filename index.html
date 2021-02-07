@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BBBhook</title>
+</head>
+<body>
+  <div id="main">
+    <p style="text-align: center;">Discord Webhook</p>
+    <input type="text" name="" id="name" placeholder="name">
+    <textarea name="" id="text" cols="30" rows="10" placeholder="content"></textarea>
+    <input type="button" id="btn" value="Submit" onclick="sender()">
+  </div>
+</body>
+</html>
+<style>
+  #main {
+    width: 200px;
+    position: absolute;
+    top: 50px;
+    margin-left: calc(50% - 100px);
+  }
+  input, textarea {
+    width: 200px;
+    border: solid 1px;
+    padding: 5px;
+    font-family: "メイリオ" ;
+    font-size: 14px;
+  }
+  #name {
+    border-bottom: none;
+  }
+  #btn {
+    width: 212.5px;
+  }
+</style>
+<script>
+  webhook_url = "";　// input your webhook url
+
+
+  function sender() {
+    if (!name) name = "BBBhook"
+    text = document.getElementById("text");
+    name = document.getElementById("name");
+    send("BBBhook : "+name, text);
+  }
+
+  function send(name, text) {
+    if (text.length > 2000) {
+      console.log("Over text length!!");
+      return;
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', webhook_url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 204) {
+        var res = xhr.responseText;
+        console.log(res);
+        text.value = '';
+      }
+    }
+    json = { "username":name.value , "content":text.value };
+    xhr.send(JSON.stringify(json))
+  }
+</script>
